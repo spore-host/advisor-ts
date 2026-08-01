@@ -1,0 +1,68 @@
+name: Publish to npm
+
+# Publishes @spore-host/advisor-ts to the npm registry when a version tag is
+# pushed (e.g. v0.1.0). Uses npm Trusted Publishing: publish is authorized by
+# GitHub OIDC (id-token: write) scoped to this repo + workflow — no NPM_TOKEN,
+# nothing to rotate. Provenance is attached automatically. Requires the trusted
+# publisher to be registered on npmjs.com (org spore-host, repo advisor-ts,
+# workflow publish.yml) AND a first manual publish to bootstrap the package
+# (Trusted Publishing can't create a never-published package).
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # npm provenance
+
+jobs:
+  publish:
+    name: build + publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 22: npm's Trusted Publishing support needs a recent npm CLI, and
+      # current npm releases require Node >= 22.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: "https://registry.npmjs.org"
+
+      # Trusted Publishing (OIDC-authorized publish) needs npm >= 11.5.1.
+      - name: Upgrade npm for Trusted Publishing
+        run: npm install -g npm@latest
+
+      - run: npm ci
+
+      # Publish the library artifacts only (dist/), matching package.json "files".
+      - name: Build library
+        run: npm run build:lib
+
+      - name: Assert declarations emitted
+        run: test -f dist/index.d.ts && test -f dist/bedrock/index.d.ts
+
+      # The pure/SDK split is a published guarantee, not just a local convention:
+      # a consumer of the default entry must not be made to ship the Bedrock SDK.
+      # Verified here too, so a broken split can't reach the registry.
+      - name: Assert the default entry is SDK-free
+        run: npx vitest run src/core/isolation.test.ts
+
+      # Guard: the pushed tag must match the package.json version, so a v0.1.0 tag
+      # can't accidentally publish 0.0.1.
+      - name: Verify tag matches package version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "tag v$TAG != package.json $PKG" >&2; exit 1
+          fi
+          echo "tag and package version agree: $PKG"
+
+      # No NODE_AUTH_TOKEN: OIDC (id-token: write) authorizes the publish, and
+      # provenance is attached automatically under Trusted Publishing.
+      - name: Publish
+        run: npm publish --access public

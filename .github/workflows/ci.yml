@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: typecheck · test · build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test (with coverage)
+        run: npm run test:cov
+
+      - name: Build (library + docs)
+        run: npm run build
+
+      - name: Assert library declarations emitted
+        run: test -f dist/index.d.ts && test -f dist/bedrock/index.d.ts
+
+      # Run the import-graph guard as its own step, so a regression that lets the
+      # default entry reach @aws-sdk/* is named in the log rather than buried in
+      # the full suite's output.
+      - name: Assert the default entry is SDK-free
+        run: npx vitest run src/core/isolation.test.ts
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore

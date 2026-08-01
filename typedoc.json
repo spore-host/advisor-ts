@@ -1,0 +1,13 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/index.ts", "src/bedrock/index.ts"],
+  "out": "site/api",
+  "name": "advisor-ts API reference",
+  "readme": "none",
+  "includeVersion": true,
+  "excludeInternal": true,
+  "hideGenerator": true,
+  "navigationLinks": {
+    "GitHub": "https://github.com/spore-host/advisor-ts"
+  }
+}
