@@ -2,8 +2,15 @@
 
 All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
-adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Pre-1.0,
-breaking changes bump the MINOR version.
+adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+**advisor-ts stays on `0.x.y` indefinitely.** There is no planned 1.0.0, so
+breaking changes bump the MINOR version — permanently, not as a pre-release
+convention. Read a MINOR bump as "may break you" for the life of the project.
+
+Its version line is **its own**, as with every spore.host `-ts` library. Unlike
+spawn-ts / truffle-ts / lagotto-ts, advisor-ts has **no Go original**, so it makes
+no parity claim at all — there is nothing to be at parity with.
 
 ## [Unreleased]
 

@@ -119,5 +119,10 @@ publish.yml), tag `v*` → token-free OIDC publish with provenance.
 ## Versioning & changelog (required)
 
 Semantic Versioning + Keep a Changelog. Every user-facing change updates
-`CHANGELOG.md` under `## [Unreleased]` in the same PR. Pre-1.0, breaking changes
-bump MINOR. Release: rename `[Unreleased]` → `[X.Y.Z] - DATE`, tag `vX.Y.Z`.
+`CHANGELOG.md` under `## [Unreleased]` in the same PR. Release: rename
+`[Unreleased]` → `[X.Y.Z] - DATE`, tag `vX.Y.Z`.
+
+**`0.x.y` indefinitely — there is no planned 1.0.0.** Breaking changes bump MINOR
+permanently, not as a pre-release convention. This holds across every spore.host
+`-ts` library. advisor-ts has no Go original, so unlike its siblings it makes no
+parity claim at all.

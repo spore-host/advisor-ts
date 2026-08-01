@@ -226,6 +226,11 @@ npx vitest run src/core/isolation.test.ts   # the default entry pulls in no @aws
   already structured data rather than a string precisely so it can grow into
   one), data-movement bindings, and multi-region comparison.
 
+advisor-ts stays on `0.x.y` **indefinitely**; there is no planned 1.0.0, so a MINOR
+bump is the breaking-change signal for the life of the project. Unlike its
+spawn-ts / truffle-ts / lagotto-ts siblings it has no Go original, so it makes no
+parity claim.
+
 ## License
 
 Apache-2.0 © Scott Friedman. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
