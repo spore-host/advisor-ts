@@ -14,6 +14,15 @@ no parity claim at all — there is nothing to be at parity with.
 
 ## [Unreleased]
 
+### Changed
+- **vitest and `@vitest/coverage-v8` bumped from 2.1.9 to 4.1.10** (dev-only;
+  no published-package impact). The two are version-locked via
+  `peerDependencies` — `@vitest/coverage-v8` pins the exact `vitest` version it
+  was built against — so bumping either alone produces an `ERESOLVE` conflict;
+  Dependabot opened them as separate PRs, folded into one bump here. Verified:
+  clean `npm install`, `typecheck`, and `test:cov` (179 tests, coverage
+  percentages unchanged) on Node 20.
+
 ### Fixed
 - **A pin's version comment can no longer silently misstate what CI runs.**
   `src/ci-hygiene.test.ts` required only that *some* `# vN` comment be present,
