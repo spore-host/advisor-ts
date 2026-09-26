@@ -15,6 +15,14 @@ no parity claim at all — there is nothing to be at parity with.
 ## [Unreleased]
 
 ### Changed
+
+- Dependabot no longer proposes **TypeScript major** upgrades. The 7.0.2 bump
+  (#8) failed `typecheck`, `test` and `build`, so it sat open and red rather than
+  landing — TypeScript 7 needs a deliberate migration, not a version bump. The
+  toolchain is capped at 5.x until that happens, so CI stops being red on an
+  upgrade nobody scheduled.
+
+### Changed
 - **vitest and `@vitest/coverage-v8` bumped from 2.1.9 to 4.1.10** (dev-only;
   no published-package impact). The two are version-locked via
   `peerDependencies` — `@vitest/coverage-v8` pins the exact `vitest` version it
