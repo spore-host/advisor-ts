@@ -70,7 +70,7 @@
   "devDependencies": {
     "@aws-sdk/client-bedrock": "^3.1131.0",
     "@aws-sdk/client-bedrock-runtime": "^3.1131.0",
-    "@types/node": "^26.5.1",
+    "@types/node": "^26.6.2",
     "@vitest/coverage-v8": "^4.1.10",
     "typedoc": "^0.28.20",
     "typescript": "^5.6.0",
